@@ -5,11 +5,11 @@ on: workflow_dispatch
 
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
-  RESOURCE-GROUP: rg-eshoponweb-westeurope
-  LOCATION: austriaeast
+  RESOURCE-GROUP: rg-eshoponweb-eastus
+  LOCATION: norwayeast
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 852b6eb0-7e9d-44be-aad6-fd13b7f8ca6b
-  WEBAPP-NAME: devops-webapp-westeurope-2324821062
+  WEBAPP-NAME: devops-webapp-eastus-1090122930
 
 #Required for OIDC login to Azure (student subscription - no service principal)
 permissions:
