@@ -1,15 +1,20 @@
 name: eShopOnWeb Build and Test
 
 #Triggers (uncomment line below to use it)
-#on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
-  RESOURCE-GROUP: rg-eshoponweb-NAME
-  LOCATION: westeurope
+  RESOURCE-GROUP: rg-eshoponweb-westeurope
+  LOCATION: austriaeast
   TEMPLATE-FILE: infra/webapp.bicep
-  SUBSCRIPTION-ID: YOUR-SUBS-ID
-  WEBAPP-NAME: eshoponweb-webapp-NAME
+  SUBSCRIPTION-ID: 852b6eb0-7e9d-44be-aad6-fd13b7f8ca6b
+  WEBAPP-NAME: devops-webapp-westeurope-2324821062
+
+#Required for OIDC login to Azure (student subscription - no service principal)
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   #Build, test and publish .net web project in repository
@@ -69,11 +74,13 @@ jobs:
           name: bicep-template
           path: bicep-template
 
-      #Login in your azure subscription using a service principal (credentials stored as GitHub Secret in repo)
+      #Login in your azure subscription using OIDC (managed identity with federated credential)
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Deploy Azure WebApp using Bicep file
       - name: deploy
